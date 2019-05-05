@@ -1,0 +1,25 @@
+function [] = P05_MLP()
+%P5: Multilayer Perceptron
+%Fecha de elaboración: 2019/05/05
+%Autor: Villegas Hernández Carlos Uriel
+%Autor: Morales Flores Victor Leonel
+%Asignatura: Neural Networks
+%Escuela: ESCOM-IPN(MX)
+
+    archivoP=input('Ingrese el nombre del archivo que contiene las entradas[p](sin extension .txt): ','s');
+    archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
+    rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
+    rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
+    fprintf("\nLas opciones de separación de datos son:");
+    fprintf("\n 1)80% Entrenamiento, 10% Validación, %10% Prueba ");
+    fprintf("\n 2)70% Entrenamiento, 15% Validación, %15% Prueba ");
+    opcDatos= input('Indica la forma de separar los datos que deseas: ');
+    archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
+    archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
+    alfa= input('Indica el factor de aprendizaje: ');
+    eepoch_max= input('Indica el máximo de épocas: ');
+    e_epoch= input('Indica el error máximo tolerable: ');
+    eepoch_val= input('Indica cada cuánto será la época de validación: ');
+    num_val= input('Indica el número máximo de intentos del error de validación:');
+end
+
