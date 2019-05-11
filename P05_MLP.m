@@ -3,6 +3,7 @@ function [] = P05_MLP()
 %Fecha de elaboración: 2019/05/05
 %Autor: Villegas Hernández Carlos Uriel
 %Autor: Morales Flores Victor Leonel
+%Autor: Flores García Alberto
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)
     
