@@ -5,21 +5,51 @@ function [] = P05_MLP()
 %Autor: Morales Flores Victor Leonel
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)
-
-    archivoP=input('Ingrese el nombre del archivo que contiene las entradas[p](sin extension .txt): ','s');
-    archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
-    rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
-    rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
-    fprintf("\nLas opciones de separación de datos son:");
-    fprintf("\n 1)80% Entrenamiento, 10% Validación, %10% Prueba ");
-    fprintf("\n 2)70% Entrenamiento, 15% Validación, %15% Prueba ");
-    opcDatos= input('Indica la forma de separar los datos que deseas: ');
+    
+    archivoP=input('Ingrese el numero del polinomio deseado: ','s');
+    %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
+    %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
+    %rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
+    %fprintf("\nLas opciones de separación de datos son:");
+    %fprintf("\n 1)80% Entrenamiento, 10% Validación, %10% Prueba ");
+    %fprintf("\n 2)70% Entrenamiento, 15% Validación, %15% Prueba ");
+    %opcDatos= input('Indica la forma de separar los datos que deseas: ');
     archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
     archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
-    alfa= input('Indica el factor de aprendizaje: ');
+    %alfa= input('Indica el factor de aprendizaje: ');
     eepoch_max= input('Indica el máximo de épocas: ');
-    e_epoch= input('Indica el error máximo tolerable: ');
-    eepoch_val= input('Indica cada cuánto será la época de validación: ');
-    num_val= input('Indica el número máximo de intentos del error de validación:');
+    %e_epoch= input('Indica el error máximo tolerable: ');
+    %eepoch_val= input('Indica cada cuánto será la época de validación: ');
+    %num_val= input('Indica el número máximo de intentos del error de validación:');
+    
+    [p,targets]=lecturaDataSet(archivoP);
+    [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
+    %Visualizacion del polinomio a tratar
+    GraficarPolinomio(p,targets,targets);
+    
+    %Generacion aleatoria de pesos y bias
+    [fS,cS]=size(S);
+    W=cell(1,fS);
+    b=cell(1,fS);
+    rAux=R;
+    for i=1:fS
+        W{1,i}=generacionW(S(i,1),R);
+        b{1,i}=generacionBias(S(i,1));
+        R=S(i,1);
+    end
+    R=rAux;
+    W
+    b
+    
+    %Propagacion
+    %Tamanio de p
+    [fp,cp]=size(p);
+    for epoca=1:eepoch_max
+        fprintf(strcat("Epoca ",int2str(epoca),":"));
+        for valp=1:fp
+            a=propagacionAdelante(fS,W,b,p(valp,1),func)
+        end
+    end
+    
 end
 
