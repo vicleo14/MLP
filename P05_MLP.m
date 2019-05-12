@@ -1,6 +1,5 @@
-function [] = P05_MLP()
 %P5: Multilayer Perceptron
-%Fecha de elaboraciÛn: 2019/05/05
+%Fecha de elaboraci√≥n: 2019/05/05
 %Autor: Villegas Hernandez Carlos Uriel
 %Autor: Morales Flores Victor Leonel
 %Autor: Flores Garcia Alberto
@@ -11,19 +10,19 @@ function [] = P05_MLP()
     Eepoch=0;
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
-    %rangoInf= input('Indica el valor mÌnimo en el rango de la seÒal: ');
-    %rangoSup= input('Indica el valor mÌnimo en el rango de la seÒal: ');
-    fprintf("\nLas opciones de separaciÛn de datos son:");
-    fprintf("\n 1)80%% Entrenamiento, 10%% ValidaciÛn, 10%% Prueba ");
-    fprintf("\n 2)70%% Entrenamiento, 15%% ValidaciÛn, 15%% Prueba ");
+    %rangoInf= input('Indica el valor m√≠nimo en el rango de la se√±al: ');
+    %rangoSup= input('Indica el valor m√≠nimo en el rango de la se√±al: ');
+    fprintf("\nLas opciones de separaci√≥n de datos son:");
+    fprintf("\n 1)80%% Entrenamiento, 10%% Validaci√≥n, 10%% Prueba ");
+    fprintf("\n 2)70%% Entrenamiento, 15%% Validaci√≥n, 15%% Prueba ");
     opcDatos= input('\nIndica la forma de separar los datos que deseas: ');
     archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
     archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
     alfa= input('Indica el factor de aprendizaje: ');
-    eepoch_max= input('Indica el m·ximo de Èpocas: ');
-    eepoch= input('Indica el error m·ximo tolerable: ');
-    eepoch_val= input('Indica cada cu·nto ser· la Època de validaciÛn: ');
-    %num_val= input('Indica el n˙mero m·ximo de intentos del error de validaciÛn:');
+    eepoch_max= input('Indica el m√°ximo de √©pocas: ');
+    eepoch= input('Indica el error m√°ximo tolerable: ');
+    eepoch_val= input('Indica cada cu√°nto ser√° la √©poca de validaci√≥n: ');
+    %num_val= input('Indica el n√∫mero m√°ximo de intentos del error de validaci√≥n:');
     
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
@@ -103,6 +102,4 @@ function [] = P05_MLP()
         %la red
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
         fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
-    end 
-end
-
+    end
