@@ -1,9 +1,9 @@
 function [] = P05_MLP()
 %P5: Multilayer Perceptron
 %Fecha de elaboración: 2019/05/05
-%Autor: Villegas Hernandez Carlos Uriel
+%Autor: Villegas Hernández Carlos Uriel
 %Autor: Morales Flores Victor Leonel
-%Autor: Flores Garcia Alberto
+%Autor: Flores García Alberto
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)
     
@@ -17,7 +17,7 @@ function [] = P05_MLP()
     %opcDatos= input('Indica la forma de separar los datos que deseas: ');
     archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
     archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
-    alfa= input('Indica el factor de aprendizaje: ');
+    %alfa= input('Indica el factor de aprendizaje: ');
     eepoch_max= input('Indica el máximo de épocas: ');
     %e_epoch= input('Indica el error máximo tolerable: ');
     %eepoch_val= input('Indica cada cuánto será la época de validación: ');
@@ -26,7 +26,7 @@ function [] = P05_MLP()
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
     %Visualizacion del polinomio a tratar
-    %GraficarPolinomio(p,targets,targets);
+    GraficarPolinomio(p,targets,targets);
     
     %Generacion aleatoria de pesos y bias
     [fS,cS]=size(S);
@@ -41,22 +41,17 @@ function [] = P05_MLP()
         R=S(i,1);
     end
     R=rAux;
-    %W
-    %b
+    W
+    b
     
     %Propagacion
     %Tamanio de p
     [fp,cp]=size(p);
     for epoca=1:eepoch_max
         fprintf(strcat("Epoca ",int2str(epoca),":"));
-        %Entrenamiento 
         for valp=1:fp
             a=propagacionAdelante(M,W,b,p(valp,1),func);
-            %M porque ahi se encuentra la salida de la red
-            [e,he]=errorAprendizaje(targets(valp,1),a{1,M});
-            %[W,b] = 
-            Backpropagation(W,b,a,M,func,e,alfa);
-            
+            [e,he]=errorAprendizaje();
         end
     end
     
