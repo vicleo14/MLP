@@ -1,7 +1,7 @@
 function GraficarPolinomio (p,target,results)
-    %Funcion que permite graficar toddos los valores obtenidos. 
-    %Recibe S para poder leer de forma adecuada el archivo que contiene los datos.
-%Fecha de elaboración: 2019/04/22
+%P5: Multilayer perceptron
+%   Funcion para graficar el polinomio que se esta usando 
+%Fecha de elaboración: 2019/05/11
 %Autor: Morales Flores Victor Leonel
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)

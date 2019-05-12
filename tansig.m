@@ -1,6 +1,10 @@
 function [a] = tansig(W,p,b)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%P5: Multilayer perceptron
+%   Implementacion de la funcion tansig
+%Fecha de elaboración: 2019/05/11
+%Autor: Morales Flores Victor Leonel
+%Asignatura: Neural Networks
+%Escuela: ESCOM-IPN(MX)
     a=(W*p)+b;
     [f,c]=size(a);
     for i=1:f

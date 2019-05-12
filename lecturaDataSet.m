@@ -1,8 +1,8 @@
 function [p,targets] = lecturaDataSet(nomArc)
-%P3: Aprendizaje del perceptron 
+%P5: Multilayer perceptron
 %   Funcion para la lectura del documento que contiene el dataet y que
 %   devielve las entradas a la red, los targets y el numero de neuronas de
-%   la red.
+%   la red en cada capa; asi como las funciones de transferencia.
 %Fecha de elaboración: 2019/04/06
 %Autor: Morales Flores Victor Leonel
 %Asignatura: Neural Networks
