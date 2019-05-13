@@ -1,3 +1,4 @@
+function [] = P05_MLP()
 %P5: Multilayer Perceptron
 %Fecha de elaboración: 2019/05/05
 %Autor: Villegas Hernandez Carlos Uriel
@@ -8,6 +9,8 @@
     %Variable para almacenar el error de epoca
     epoca=0;
     Eepoch=0;
+    Cont_error=0;%lleva el conteo de incremento de error en la epoca de validacion
+    Aux_error=100;%guardara el error de la epoca de validacion anterior
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
     %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
@@ -22,7 +25,7 @@
     eepoch_max= input('Indica el máximo de épocas: ');
     eepoch= input('Indica el error máximo tolerable: ');
     eepoch_val= input('Indica cada cuánto será la época de validación: ');
-    %num_val= input('Indica el número máximo de intentos del error de validación:');
+    num_val= input('Indica el número máximo de intentos del error de validación:');
     
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
@@ -59,18 +62,31 @@
         Eepoch=0;
         
         if(mod(epoca, eepoch_val)==0)
-            fprintf("\n***Validacion***");
+            fprintf("\n***Iniciando Validacion***");
              for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
-                %M porque ahi se encuentra la salida de la ultima capa de
-                %la red
                 [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
-                Eepoch=Eepoch+e;
-            end 
+                Eepoch=Eepoch+abs(e);
+             end 
             Eepoch=abs(Eepoch/fpval);
-            fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
-            GuardarEepoch(epoca,Eepoch,"a",1);
-            
+           GuardarEepoch(epoca,Eepoch,"a",1);
+           
+        %verifica si si hay incremento en el error  de epoca de validacion    
+            if Cont_error<num_val
+                if  Eepoch>Aux_error
+                    if Cont_error==1
+                        
+                        %Pen-guardar B y W donde el error fue el minimo
+                    end 
+                   Cont_error=Cont_error+1;
+                else 
+                    Cont_error=0;
+                end
+                Aux_error=Eepoch;
+            else 
+                fprintf("\n***Earlyn Stoping ACTIVADO***");
+            end 
+                   
         else
             %Entrenamiento
             fprintf("\n---Entrenamiento---");
@@ -79,7 +95,7 @@
                 %M porque ahi se encuentra la salida de la ultima capa de
                 %la red
                 [e,he]=errorAprendizaje(ttrain(valp,1),a{1,M});
-                Eepoch=Eepoch+e;
+                Eepoch=Eepoch+abs(e);
                 [W,b] =Backpropagation(W,b,a,M,func,e,alfa,ptrain(valp,1));
             end 
             Eepoch=abs(Eepoch/fptrain);
@@ -102,4 +118,5 @@
         %la red
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
         fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
-    end
+    end 
+end
