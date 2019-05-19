@@ -84,7 +84,7 @@ function [] = P05_MLP()
                 end
                 Aux_error=Eepoch;
             else 
-                fprintf("\n***Earlyn Stoping ACTIVADO***");
+                fprintf("\n***Early Stopping ACTIVADO***");
             end 
                    
         else
