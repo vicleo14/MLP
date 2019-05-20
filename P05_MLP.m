@@ -8,10 +8,7 @@
     %Variable para almacenar el error de epoca
     epoca=0;
     Eepoch=0;
-    Cont_error=0;%lleva el conteo de incremento de error en la epoca de validacion
-    Aux_error=100;%guardara el error de la epoca de validacion anterior
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
-    %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
     %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
     %rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
     fprintf("\nLas opciones de separación de datos son:");
@@ -24,31 +21,42 @@
     eepoch_max= input('Indica el máximo de épocas: ');
     eepoch= input('Indica el error máximo tolerable: ');
     eepoch_val= input('Indica cada cuánto será la época de validación: ');
-    num_val= input('Indica el número máximo de intentos del error de validación:');
-    
+    %num_val= input('Indica el número máximo de intentos del error de validación:');
+    archi=input('¿Usará archivo para pesos y bias? 1-Si. 0-No: ');
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
     %Visualizacion del polinomio a tratar
     GraficarPolinomio(p,targets,targets);
     
-    %Generacion aleatoria de pesos y bias
+    %Generacion aleatoria de pesos y bias----------------------------------
     [fS,cS]=size(S);
     %Numero de capas
     M=fS;
-    W=cell(1,M);
-    b=cell(1,M);
-    rAux=R;
-    for i=1:M
-        W{1,i}=generacionW(S(i,1),R);
-        b{1,i}=generacionBias(S(i,1));
-        R=S(i,1);
+    if archi==0
+        W=cell(1,M);
+        b=cell(1,M);
+        rAux=R;
+        for i=1:M
+            W{1,i}=generacionW(S(i,1),R);
+            b{1,i}=generacionBias(S(i,1));
+            R=S(i,1);
+        end
+        R=rAux;
+    else
+        W=cell(1,M);
+        b=cell(1,M);
+        for i=1:M
+            textW="W"+num2str(i)+".txt";
+            textb="b"+num2str(i)+".txt";
+            W(1,i)=num2cell(load(textW));
+            b(1,i)=load(textb);
+        end
     end
-    R=rAux;
     %Dividimos los datos
     [ptrain,ttrain,pval,tval,ptest,ttest]=separarDatos(p,targets,opcDatos);
     
     
-    %Tamanio de p
+    %Tamanio de p----------------------------------------------------------
     [fptrain,cptrain]=size(ptrain);
     [fpval,cpval]=size(pval);
     [fptest,cptest]=size(ptest);
@@ -61,31 +69,18 @@
         Eepoch=0;
         
         if(mod(epoca, eepoch_val)==0)
-            fprintf("\n***Iniciando Validacion***");
+            fprintf("\n***Validacion***");
              for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
+                %M porque ahi se encuentra la salida de la ultima capa de
+                %la red
                 [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
-                Eepoch=Eepoch+abs(e);
-             end 
-            Eepoch=abs(Eepoch/fpval);
-           GuardarEepoch(epoca,Eepoch,"a",1);
-           
-        %verifica si si hay incremento en el error  de epoca de validacion    
-            if Cont_error<num_val
-                if  Eepoch>Aux_error
-                    if Cont_error==1
-                        
-                        %Pen-guardar B y W donde el error fue el minimo
-                    end 
-                   Cont_error=Cont_error+1;
-                else 
-                    Cont_error=0;
-                end
-                Aux_error=Eepoch;
-            else 
-                fprintf("\n***Early Stopping ACTIVADO***");
+                Eepoch=Eepoch+e;
             end 
-                   
+            Eepoch=abs(Eepoch/fpval);
+            fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
+            GuardarEepoch(epoca,Eepoch,"a",1);
+            
         else
             %Entrenamiento
             fprintf("\n---Entrenamiento---");
@@ -94,7 +89,7 @@
                 %M porque ahi se encuentra la salida de la ultima capa de
                 %la red
                 [e,he]=errorAprendizaje(ttrain(valp,1),a{1,M});
-                Eepoch=Eepoch+abs(e);
+                Eepoch=Eepoch+e;
                 [W,b] =Backpropagation(W,b,a,M,func,e,alfa,ptrain(valp,1));
             end 
             Eepoch=abs(Eepoch/fptrain);
@@ -103,6 +98,10 @@
             fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
             if(Eepoch<eepoch )
                 fprintf("\n>>>>>>El valor de error de la red es menor al error tolerable. Acaba entrenamiento");
+                %Se guarda el último valor de los pesos y bias
+                for i=1:M
+                    
+                end
                 break;
             end
         end
@@ -117,4 +116,5 @@
         %la red
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
         fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
-    end 
+    end
+    %clear;
