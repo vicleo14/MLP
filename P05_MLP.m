@@ -9,7 +9,10 @@ function [] = P05_MLP()
     %Variable para almacenar el error de epoca
     epoca=0;
     Eepoch=0;
-    Cont_error=0;%lleva el conteo de incremento de error en la epoca de validacion
+    wStoping=fopen('WStoping.txt','w');%txt donde se guardaran los valores de W del stoping
+    eStoping=fopen('EStoping.txt','w');%txt donde se guardaran los valores del error de epoca
+    bStoping=fopen('BStoping.txt','w');%txt donde se guardaran los valores de B del stoping Earliny
+    Cont_error=-1;%lleva el conteo de incremento de error en la epoca de validacion
     Aux_error=100;%guardara el error de la epoca de validacion anterior
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
@@ -62,30 +65,29 @@ function [] = P05_MLP()
         Eepoch=0;
         
         if(mod(epoca, eepoch_val)==0)
-            fprintf("\n***Iniciando Validacion***");
-             for valp=1:fpval
+           fprintf("\n***Iniciando Validacion***");
+            for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
                 [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
                 Eepoch=Eepoch+abs(e);
-             end 
-            Eepoch=abs(Eepoch/fpval);
-           GuardarEepoch(epoca,Eepoch,"a",1);
-           
-        %verifica si si hay incremento en el error  de epoca de validacion    
+            end
+            Eepoch=Eepoch/fpval;
+            ImprimirStoping(Eepoch,eStoping);%Guarda el valor de error de epoca el cual se graficara
+            %verifica si si hay incremento en el error  de epoca de validacion
             if Cont_error<num_val
                 if  Eepoch>Aux_error
-                    if Cont_error==1
-                        
-                        %Pen-guardar B y W donde el error fue el minimo
-                    end 
-                   Cont_error=Cont_error+1;
-                else 
-                    Cont_error=0;
+                    ImprimirStoping(W,wStoping);%Guarda los valores de w y b cuando se detecta el primer incremento de error de epoca
+                    ImprimirStoping(b,bStoping);
+                    Cont_error=Cont_error+1;
+                else
+                    Cont_error=0;%reinicia el contador de incrementos del error al detectar que el error disminuye o no cambia
                 end
-                Aux_error=Eepoch;
-            else 
-                fprintf("\n***Early Stopping ACTIVADO***");
-            end 
+                Aux_error=Eepoch;%Guarda el valor de error de epoca actual  para  comparar si hay un incremento en la siguiente validacion
+            else
+                
+                fprintf("\n***Earlyn Stoping ACTIVADO***");
+                break;
+            end
                    
         else
             %Entrenamiento
