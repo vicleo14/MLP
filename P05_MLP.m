@@ -48,8 +48,8 @@
         for i=1:M
             textW="W"+num2str(i)+".txt";
             textb="b"+num2str(i)+".txt";
-            W{1,i}=num2cell(load(textW));
-            b{1,i}=num2cell(load(textb));
+            W{1,i}=load(textW);
+            b{1,i}=load(textb);
         end
     end
     %Dividimos los datos
