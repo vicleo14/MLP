@@ -1,4 +1,3 @@
-function [] = P05_MLP()
 %P5: Multilayer Perceptron
 %Fecha de elaboración: 2019/05/05
 %Autor: Villegas Hernandez Carlos Uriel
@@ -119,4 +118,3 @@ function [] = P05_MLP()
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
         fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
     end 
-end
