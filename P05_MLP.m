@@ -60,17 +60,17 @@ function [] = P05_MLP()
         Eepoch=0;
         
         if(mod(epoca, eepoch_val)==0)
-            fprintf("\n***Validacion***");
+        %    fprintf("\n***Validacion***");
              for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
                 %M porque ahi se encuentra la salida de la ultima capa de
                 %la red
-                [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
-                Eepoch=Eepoch+e;
+        %       [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
+        %        Eepoch=Eepoch+e;
             end 
-            Eepoch=abs(Eepoch/fpval);
-            fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
-            GuardarEepoch(epoca,Eepoch,"a",1);
+        %    Eepoch=abs(Eepoch/fpval);
+        %    fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
+        %    GuardarEepoch(epoca,Eepoch,"a",1);
             
         else
             %Entrenamiento
