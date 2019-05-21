@@ -21,7 +21,7 @@
     eepoch_max= input('Indica el máximo de épocas: ');
     eepoch= input('Indica el error máximo tolerable: ');
     eepoch_val= input('Indica cada cuánto será la época de validación: ');
-    %num_val= input('Indica el número máximo de intentos del error de validación:');
+    num_val= input('Indica el número máximo de intentos del error de validación:');
     archi=input('¿Usará archivo para pesos y bias? 1-Si. 0-No: ');
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
@@ -64,7 +64,13 @@
     %Propagacion
     GuardarEepoch(epoca,Eepoch,"w",1);
     GuardarEepoch(epoca,Eepoch,"w",0);
+    ErrorEarly=1;
+    EarlyStopping=0;
     for epoca=1:eepoch_max
+        if EarlyStopping==num_val
+            disp('\nSe activa EARLY-STOPPING!!!');
+            break;
+        end
         fprintf(strcat("\nEpoca ",int2str(epoca),":"));
         Eepoch=0;
         
@@ -80,7 +86,12 @@
             Eepoch=abs(Eepoch/fpval);
             fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
             GuardarEepoch(epoca,Eepoch,"a",1);
-            
+            if Eepoch>ErrorEarly
+                EarlyStopping=EarlyStopping+1;
+            else
+                ErrorEarly=Eepoch;
+                EarlyStopping=0;
+            end
         else
             %Entrenamiento
             fprintf("\n---Entrenamiento---");
@@ -99,6 +110,7 @@
             if(Eepoch<eepoch )
                 fprintf("\n>>>>>>El valor de error de la red es menor al error tolerable. Acaba entrenamiento");
                 %Se guarda el último valor de los pesos y bias
+                %//////////TODO///////////
                 for i=1:M
                     
                 end
