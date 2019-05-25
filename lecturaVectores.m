@@ -2,11 +2,11 @@ function [r,S,func] = lecturaVectores(archV1,archV2)
 %P5: Multilayer perceptron
 %   Funcion para leer los vectores que V1 y V2 que definen la arquitectura
 %   de la red
-%Fecha de elaboración: 2019/05/11
+%Fecha de elaboraciÃ³n: 2019/05/11
 %Autor: Morales Flores Victor Leonel
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)xt'),'r')
-    arcV1 = fopen(strcat(archV1,'.txt'),'r');;
+    arcV1 = fopen(strcat(archV1,'.txt'),'r');
     v1=fscanf(arcV1,"%d",Inf)
     fclose(arcV1);
     
