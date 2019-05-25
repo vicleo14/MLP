@@ -69,6 +69,30 @@
     for epoca=1:eepoch_max
         if EarlyStopping==num_val
             disp('\nSe activa EARLY-STOPPING!!!');
+            for i=1:M
+                    textw=['W',num2str(i),'.txt'];
+                    textb=['b',num2str(i),'.txt'];
+                    fidw=fopen(textw,'w');
+                    fidb=fopen(textb,'w');
+                    Wg=cell2mat(W(1,i));
+                    bg=cell2mat(b(1,i));
+                    [Fw,Cw]=size(Wg);
+                    [Fb,Cb]=size(bg);
+                    for j=1:Fw
+                        for k=1:Cw
+                            fprintf(fidw,'%f\t',Wg(j,k));
+                        end
+                        fprintf(fidw,'\n');
+                    end
+                    for j=1:Fb
+                        for k=1:Cb
+                            fprintf(fidb,'%f\t',bg(j,k));
+                        end
+                        fprintf(fidb,'\n');
+                    end
+                    fclose(fidw);
+                    fclose(fidb);
+                end
             break;
         end
         fprintf(strcat("\nEpoca ",int2str(epoca),":"));
@@ -110,9 +134,29 @@
             if(Eepoch<eepoch )
                 fprintf("\n>>>>>>El valor de error de la red es menor al error tolerable. Acaba entrenamiento");
                 %Se guarda el último valor de los pesos y bias
-                %//////////TODO///////////
                 for i=1:M
-                    
+                    textw=['W',num2str(i),'.txt'];
+                    textb=['b',num2str(i),'.txt'];
+                    fidw=fopen(textw,'w');
+                    fidb=fopen(textb,'w');
+                    Wg=cell2mat(W(1,i));
+                    bg=cell2mat(b(1,i));
+                    [Fw,Cw]=size(Wg);
+                    [Fb,Cb]=size(bg);
+                    for j=1:Fw
+                        for k=1:Cw
+                            fprintf(fidw,'%f\t',Wg(j,k));
+                        end
+                        fprintf(fidw,'\n');
+                    end
+                    for j=1:Fb
+                        for k=1:Cb
+                            fprintf(fidb,'%f\t',bg(j,k));
+                        end
+                        fprintf(fidb,'\n');
+                    end
+                    fclose(fidw);
+                    fclose(fidb);
                 end
                 break;
             end
