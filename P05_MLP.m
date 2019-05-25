@@ -1,13 +1,13 @@
 function [] = P05_MLP()
 %P5: Multilayer Perceptron
-%Fecha de elaboración: 2019/05/05
+%Fecha de elaboracion: 2019/05/05
 %Autor: Villegas Hernandez Carlos Uriel
 %Autor: Morales Flores Victor Leonel
 %Autor: Flores Garcia Alberto
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)
     %Variable para almacenar el error de epoca
-    epoca=0;
+    
     Eepoch=0;
     wStoping=fopen('WStoping.txt','w');%txt donde se guardaran los valores de W del stoping
     eStoping=fopen('EStoping.txt','w');%txt donde se guardaran los valores del error de epoca
@@ -18,39 +18,50 @@ function [] = P05_MLP()
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
     %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
     %rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
-    fprintf("\nLas opciones de separación de datos son:");
-    fprintf("\n 1)80%% Entrenamiento, 10%% Validación, 10%% Prueba ");
-    fprintf("\n 2)70%% Entrenamiento, 15%% Validación, 15%% Prueba ");
+    fprintf("\nLas opciones de separacion de datos son:");
+    fprintf("\n 1)80%% Entrenamiento, 10%% Validacion, 10%% Prueba ");
+    fprintf("\n 2)70%% Entrenamiento, 15%% Validacion, 15%% Prueba ");
     opcDatos= input('\nIndica la forma de separar los datos que deseas: ');
     archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
     archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
     alfa= input('Indica el factor de aprendizaje: ');
     eepoch_max= input('Indica el máximo de épocas: ');
     eepoch= input('Indica el error máximo tolerable: ');
-    eepoch_val= input('Indica cada cuánto será la época de validación: ');
-    num_val= input('Indica el número máximo de intentos del error de validación:');
-    
+    eepoch_val= input('Indica cada cuánto será la época de validacion: ');
+    num_val= input('Indica el número máximo de intentos del error de validacion:');
+    archi=input('�Usar� archivo para pesos y bias? 1-Si. 0-No: ');
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
-    %Visualizacion del polinomio a tratar
-    GraficarPolinomio(p,targets,targets);
     
-    %Generacion aleatoria de pesos y bias
+    
+    %Generacion aleatoria de pesos y bias----------------------------------
     [fS,cS]=size(S);
     %Numero de capas
     M=fS;
-    W=cell(1,M);
-    b=cell(1,M);
-    rAux=R;
-    for i=1:M
-        W{1,i}=generacionW(S(i,1),R);
-        b{1,i}=generacionBias(S(i,1));
-        R=S(i,1);
+    if archi==0
+        epoca=0;
+        W=cell(1,M);
+        b=cell(1,M);
+        rAux=R;
+        for i=1:M
+            W{1,i}=generacionW(S(i,1),R);
+            b{1,i}=generacionBias(S(i,1));
+            R=S(i,1);
+        end
+        R=rAux;
+        GuardarArchivo(epoca,W,b,M,"w");
+        GuardarEepoch(epoca,Eepoch,"w",1);
+        GuardarEepoch(epoca,Eepoch,"w",0);
+    else
+        [W,b,epoca] = RecuperarDatos(M,R,S);
     end
-    R=rAux;
+    
     %Dividimos los datos
     [ptrain,ttrain,pval,tval,ptest,ttest]=separarDatos(p,targets,opcDatos);
-    
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    WStopping=cell(1,M);
+    BStopping=cell(1,M);
+    %%%%%%%%%%%%%%%%%%%%%%%%%
     
     %Tamanio de p
     [fptrain,cptrain]=size(ptrain);
@@ -58,35 +69,44 @@ function [] = P05_MLP()
     [fptest,cptest]=size(ptest);
     
     %Propagacion
-    GuardarEepoch(epoca,Eepoch,"w",1);
-    GuardarEepoch(epoca,Eepoch,"w",0);
-    for epoca=1:eepoch_max
+    ErrorEarly=-1;
+    EarlyStopping=0;
+    for k=1:eepoch_max
+        epoca=epoca+1;
+        if EarlyStopping==num_val
+            fprintf('\nSe activa EARLY-STOPPING!!!');
+            W=WStopping;
+            b=BStopping;
+            GuardarArchivo(epoca,W,b,M,"a");
+            break;
+        end
         fprintf(strcat("\nEpoca ",int2str(epoca),":"));
         Eepoch=0;
         
-        if(mod(epoca, eepoch_val)==0)
+        if(mod(k, eepoch_val)==0)
            fprintf("\n***Iniciando Validacion***");
             for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
                 [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
-                Eepoch=Eepoch+abs(e);
+                Eepoch=Eepoch+e;
             end
-            Eepoch=Eepoch/fpval;
+            Eepoch=abs(Eepoch/fpval);
+            %Sustituye imprimeStoping a fprintf?
+            fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
+            GuardarEepoch(epoca,Eepoch,"a",1);
             ImprimirStoping(Eepoch,eStoping);%Guarda el valor de error de epoca el cual se graficara
             %verifica si si hay incremento en el error  de epoca de validacion
-            if Cont_error<num_val
-                if  Eepoch>Aux_error
-                    ImprimirStoping(W,wStoping);%Guarda los valores de w y b cuando se detecta el primer incremento de error de epoca
-                    ImprimirStoping(b,bStoping);
-                    Cont_error=Cont_error+1;
-                else
-                    Cont_error=0;%reinicia el contador de incrementos del error al detectar que el error disminuye o no cambia
-                end
-                Aux_error=Eepoch;%Guarda el valor de error de epoca actual  para  comparar si hay un incremento en la siguiente validacion
+            if ErrorEarly==-1
+                ErrorEarly=Eepoch;
+                WStopping=W;
+                BStopping=b;
+            elseif Eepoch>ErrorEarly
+                EarlyStopping=EarlyStopping+1;
             else
-                
-                fprintf("\n***Earlyn Stoping ACTIVADO***");
-                break;
+                ErrorEarly=Eepoch;
+                EarlyStopping=0;
+                WStopping=W;
+                BStopping=b;
             end
                    
         else
@@ -97,28 +117,48 @@ function [] = P05_MLP()
                 %M porque ahi se encuentra la salida de la ultima capa de
                 %la red
                 [e,he]=errorAprendizaje(ttrain(valp,1),a{1,M});
-                Eepoch=Eepoch+abs(e);
+                %abs de e?
+                Eepoch=Eepoch+e;
                 [W,b] =Backpropagation(W,b,a,M,func,e,alfa,ptrain(valp,1));
             end 
             Eepoch=abs(Eepoch/fptrain);
-            
+            GuardarArchivo(epoca,W,b,M,"a");
             GuardarEepoch(epoca,Eepoch,"a",0);
+            %Falta guardar pesos y bias de cada epoca
             fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
             if(Eepoch<eepoch )
                 fprintf("\n>>>>>>El valor de error de la red es menor al error tolerable. Acaba entrenamiento");
+                for i=1:M
+                    
+                end
                 break;
             end
         end
     end
     GraficarEepoch(1);
     fprintf("\n---Prueba---");
-    size(ptest)
-    size(ttest)
+    %size(ptest)
+    %size(ttest)
+    %ttest
+    Eepoch=0;
+    y=zeros(fptest,1);
     for valp=1:fptest
         a=propagacionAdelante(M,W,b,ptest(valp,1),func);
+        y(valp,1)=a{1,M};
         %M porque ahi se encuentra la salida de la ultima capa de
         %la red
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
-        fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
+        Eepoch=Eepoch+e;
+        %fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
+        
     end 
+    Eepoch=abs(Eepoch/fptest);
+    fprintf("\nError de epoca de prueba:%f",Eepoch);
+    %Visualizacion del polinomio a tratar
+    GraficarPolinomio(p,targets,ptest,y);
+    %WStopping=W;
+    %BStopping=b;
+    %epocaStopping=epoca;
+    epoca
+    GraficarEvolucion(M,R,S);
 end

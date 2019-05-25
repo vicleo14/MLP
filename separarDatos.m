@@ -7,8 +7,8 @@ function [ptrain,ttrain,pval,tval,ptest,ttest]=separarDatos(p,targets,opcDatos)
  test=1;
     if(opcDatos==1)
         train=ceil(fp*(0.8));
-        test=floor(fp*(0.2));
-        val=floor(fp*(0.2));
+        test=floor(fp*(0.1));
+        val=floor(fp*(0.1));
     elseif(opcDatos==2)
         train=ceil(fp*(0.7));
         test=floor(fp*(0.15));

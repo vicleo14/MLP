@@ -1,0 +1,5 @@
+alfa:1e-3
+max_epoch:3000
+eepoch:1e-8
+val_cada:100
+num_val: %
