@@ -148,11 +148,11 @@ function [] = P05_MLP()
         %M porque ahi se encuentra la salida de la ultima capa de
         %la red
         [e,he]=errorAprendizaje(ttest(valp,1),a{1,M});
-        Eepoch=Eepoch+e;
+        Eepoch=Eepoch+abs(e);
         %fprintf("\n a: %f | target: %f | error: %f",a{1,M},ttest(valp,1),e);
         
     end 
-    Eepoch=abs(Eepoch/fptest);
+    Eepoch=Eepoch/fptest;
     fprintf("\nError de epoca de prueba:%f",Eepoch);
     %Visualizacion del polinomio a tratar
     GraficarPolinomio(p,targets,ptest,y);
