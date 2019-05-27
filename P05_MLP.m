@@ -128,9 +128,6 @@ function [] = P05_MLP()
             fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
             if(Eepoch<eepoch )
                 fprintf("\n>>>>>>El valor de error de la red es menor al error tolerable. Acaba entrenamiento");
-                for i=1:M
-                    
-                end
                 break;
             end
         end
