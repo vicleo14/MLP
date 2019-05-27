@@ -1,7 +1,7 @@
 function [F] = Fn(a,func)
 %P5: Multilayer perceptron
 %   Obtiene F(n) que se usa para calcular la sensitividad de una capa
-%Fecha de elaboración: 2019/05/11
+%Fecha de elaboraciÃ³n: 2019/05/11
 %Autor: Morales Flores Victor Leonel
 %Asignatura: Neural Networks
 %Escuela: ESCOM-IPN(MX)
@@ -16,7 +16,7 @@ function [F] = Fn(a,func)
         elseif(func==2)
             F(i,i)=a(i,1)*(1-a(i,1));
         elseif((func==3))
-            F(i,i)=1;-(a(i,1))^2;
+            F(i,i)=1-(a(i,1))^2;
         end
     end
 end
