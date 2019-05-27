@@ -16,8 +16,8 @@ function [] = P05_MLP()
     Aux_error=100;%guardara el error de la epoca de validacion anterior
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
-    %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
-    %rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
+    %rangoInf= input('Indica el valor mÃ­nimo en el rango de la seÃ±al: ');
+    %rangoSup= input('Indica el valor mÃ­nimo en el rango de la seÃ±al: ');
     fprintf("\nLas opciones de separacion de datos son:");
     fprintf("\n 1)80%% Entrenamiento, 10%% Validacion, 10%% Prueba ");
     fprintf("\n 2)70%% Entrenamiento, 15%% Validacion, 15%% Prueba ");
@@ -25,11 +25,11 @@ function [] = P05_MLP()
     archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
     archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
     alfa= input('Indica el factor de aprendizaje: ');
-    eepoch_max= input('Indica el máximo de épocas: ');
-    eepoch= input('Indica el error máximo tolerable: ');
-    eepoch_val= input('Indica cada cuánto será la época de validacion: ');
-    num_val= input('Indica el número máximo de intentos del error de validacion:');
-    archi=input('�Usar� archivo para pesos y bias? 1-Si. 0-No: ');
+    eepoch_max= input('Indica el mÃ¡ximo de Ã©pocas: ');
+    eepoch= input('Indica el error mÃ¡ximo tolerable: ');
+    eepoch_val= input('Indica cada cuÃ¡nto serÃ¡ la Ã©poca de validacion: ');
+    num_val= input('Indica el nÃºmero mÃ¡ximo de intentos del error de validacion:');
+    archi=input('¿Usará archivo para pesos y bias? 1-Si. 0-No: ');
     [p,targets]=lecturaDataSet(archivoP);
     [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
     
@@ -88,9 +88,9 @@ function [] = P05_MLP()
             for valp=1:fpval
                 a=propagacionAdelante(M,W,b,pval(valp,1),func);
                 [e,he]=errorAprendizaje(tval(valp,1),a{1,M});
-                Eepoch=Eepoch+e;
+                Eepoch=Eepoch+abs(e);
             end
-            Eepoch=abs(Eepoch/fpval);
+            Eepoch=Eepoch/fpval;
             %Sustituye imprimeStoping a fprintf?
             fprintf("\n>>>>>Error de epoca %d: %f",epoca,Eepoch);
             GuardarEepoch(epoca,Eepoch,"a",1);
@@ -118,10 +118,10 @@ function [] = P05_MLP()
                 %la red
                 [e,he]=errorAprendizaje(ttrain(valp,1),a{1,M});
                 %abs de e?
-                Eepoch=Eepoch+e;
+                Eepoch=Eepoch+abs(e);
                 [W,b] =Backpropagation(W,b,a,M,func,e,alfa,ptrain(valp,1));
             end 
-            Eepoch=abs(Eepoch/fptrain);
+            Eepoch=Eepoch/fptrain;
             GuardarArchivo(epoca,W,b,M,"a");
             GuardarEepoch(epoca,Eepoch,"a",0);
             %Falta guardar pesos y bias de cada epoca
