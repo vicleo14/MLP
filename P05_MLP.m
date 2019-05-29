@@ -9,31 +9,44 @@ function [] = P05_MLP()
     %Variable para almacenar el error de epoca
     
     Eepoch=0;
-    wStoping=fopen('WStoping.txt','w');%txt donde se guardaran los valores de W del stoping
+    %wStoping=fopen('WStoping.txt','w');%txt donde se guardaran los valores de W del stoping
     eStoping=fopen('EStoping.txt','w');%txt donde se guardaran los valores del error de epoca
-    bStoping=fopen('BStoping.txt','w');%txt donde se guardaran los valores de B del stoping Earliny
-    Cont_error=-1;%lleva el conteo de incremento de error en la epoca de validacion
-    Aux_error=100;%guardara el error de la epoca de validacion anterior
+    %bStoping=fopen('BStoping.txt','w');%txt donde se guardaran los valores de B del stoping Earliny
+    %Cont_error=-1;%lleva el conteo de incremento de error en la epoca de validacion
+    %Aux_error=100;%guardara el error de la epoca de validacion anterior
     archivoP=input('Ingrese el numero del polinomio deseado: ','s');
     %archivoT=input('Ingrese el nombre del archivo que contiene los valores deseados[targets](sin extension .txt): ','s');
-    %rangoInf= input('Indica el valor mÃ­nimo en el rango de la seÃ±al: ');
-    %rangoSup= input('Indica el valor mÃ­nimo en el rango de la seÃ±al: ');
+    %rangoInf= input('Indica el valor mínimo en el rango de la señal: ');
+    %rangoSup= input('Indica el valor mínimo en el rango de la señal: ');
     fprintf("\nLas opciones de separacion de datos son:");
     fprintf("\n 1)80%% Entrenamiento, 10%% Validacion, 10%% Prueba ");
     fprintf("\n 2)70%% Entrenamiento, 15%% Validacion, 15%% Prueba ");
     opcDatos= input('\nIndica la forma de separar los datos que deseas: ');
-    archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
-    archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
+    %archivoArq1=input('Ingrese el nombre del archivo que contiene la arquitectura[V1](sin extension .txt): ','s');
+    %archivoArq2=input('Ingrese el nombre del archivo que contiene la arquitectura[V2](sin extension .txt): ','s');
+    tamarch=input('Ingrese el tamaño del vector 1 de la arquitectura: ');
+    Vector1=zeros(1,tamarch);
+    Vector2=zeros(1,tamarch-1);
+    disp('Vector 1:')
+    for i=1:tamarch
+        Vector1(i,1)=input('');
+    end
+    disp('Vector 2: ')
+    for i=1:tamarch-1
+        Vector2(i,1)=input('');
+    end
     alfa= input('Indica el factor de aprendizaje: ');
-    eepoch_max= input('Indica el mÃ¡ximo de Ã©pocas: ');
-    eepoch= input('Indica el error mÃ¡ximo tolerable: ');
-    eepoch_val= input('Indica cada cuÃ¡nto serÃ¡ la Ã©poca de validacion: ');
-    num_val= input('Indica el nÃºmero mÃ¡ximo de intentos del error de validacion:');
+    eepoch_max= input('Indica el máximo de épocas: ');
+    eepoch= input('Indica el error máximo tolerable: ');
+    eepoch_val= input('Indica cada cuánto será la época de validacion: ');
+    num_val= input('Indica el número máximo de intentos del error de validacion:');
     archi=input('¿Usará archivo para pesos y bias? 1-Si. 0-No: ');
     [p,targets]=lecturaDataSet(archivoP);
-    [R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
-    
-    
+    %[R,S,func] = lecturaVectores(archivoArq1,archivoArq2);
+    %Aquí se seleccionan los valores que se agarraban en la función lecturaDataset();
+    R=Vector1(1,1);
+    S=Vector1(2:end,1);
+    func=Vector2(1:end,1);
     %Generacion aleatoria de pesos y bias----------------------------------
     [fS,cS]=size(S);
     %Numero de capas
